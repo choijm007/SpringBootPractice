@@ -7,6 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import me.choijaemin.springbootdeveloper.domain.User;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
@@ -51,11 +52,12 @@ public class TokenProvider {
         }
     }
 
-    public UsernamePasswordAuthenticationToken getAuthentication(String token){
-        Claims claims =getClaims(token);
+    public Authentication getAuthentication(String token) {
+        Claims claims = getClaims(token);
         Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
-        return new UsernamePasswordAuthenticationToken(new org.springframework.security.core.userdetails
-                .User(claims.getSubject(), "", authorities), token, authorities);
+
+        return new UsernamePasswordAuthenticationToken(new org.springframework.security.core.userdetails.User(claims.getSubject
+                (), "", authorities), token, authorities);
     }
 
     public Long getUserId(String token){
